@@ -1,0 +1,198 @@
+----------登入介面---------------------
+
+//視窗永遠置中  
+private void initialize() {
+    	
+    	    frame = new JFrame();
+    	    frame.setUndecorated(true);
+    	    int windowWidth = 450; // 視窗寬度
+    	    int windowHeight = 300; // 視窗高度
+
+    	    // 取得螢幕尺寸
+    	    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    	    int screenWidth = screenSize.width;
+    	    int screenHeight = screenSize.height;
+
+    	    int x = (screenWidth - windowWidth) / 2;
+    	    int y = (screenHeight - windowHeight) / 2;
+    	    frame.setBounds(x, y, windowWidth, windowHeight);
+
+    	    frame.getContentPane().setBackground(new Color(0, 0, 0));
+    	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	    frame.getContentPane().setLayout(null);
+
+//設定帳號密碼
+        JButton loginButton = new JButton("Login");
+        loginButton.setForeground(new Color(128, 255, 0));
+        loginButton.setFont(new Font("新細明體", Font.PLAIN, 15));
+        loginButton.setBackground(new Color(0, 0, 0));
+        loginButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String username = usernameField.getText();
+                String password = new String(passwordField.getPassword());
+                
+                if (username.equals("user") && password.equals("0000")) 
+                {
+// 登入成功，跳轉到其他視窗
+                    workUI w = new  workUI();
+                    w.setVisible(true);
+                    frame.dispose();
+                } 
+                else
+                {
+                	JOptionPane.showMessageDialog(null, ""
+                			+ "<html><font color='#00ff00'>不要再忘了!"
+                			+ "\n<html><font color='#00ff00'>帳號:user"
+                			+ "\n<html><font color='#00ff00'>密碼:0000", "忘記密碼不應該喔",
+                			JOptionPane.ERROR_MESSAGE);        	
+                
+                }
+            }
+        });
+----------點餐系統---------------------
+	private JLabel timeLabel;
+	private JPanel contentPane;
+	private JTextField pe;
+	private JTextField gi;
+	private JTextField ja;
+	private JTextField co;
+	private JTextField mo;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JTextField paymentPane;
+
+/////////視窗永遠置中	
+	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+	int windowWidth = 750; // 視窗寬度
+        int windowHeight = 500; // 視窗高度
+	int x = (screenWidth - windowWidth) / 2;
+	int y = (screenHeight - windowHeight) / 2;
+	setBounds(x, y, windowWidth, windowHeight);
+
+	JButton btnNewButton = new JButton("確認送出");
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				    int Pe = (int) spinnerPe.getValue();
+	                int Gi = (int) spinnerGi.getValue();
+	                int Ja = (int) spinnerJa.getValue();
+	                int Co = (int) spinnerCo.getValue();
+	                int Mo = (int) spinnerMo.getValue();
+
+	                work w = new work(Ja, Co, Gi, Mo, Pe);
+
+	                int sum = w.getSum();
+	                if (AAA.isSelected()) sum = (int) (sum * 0.9);
+	                if (BBB.isSelected()) sum = 0;
+	                if (CCC.isSelected()) sum = sum;
+	                
+	                output.setText(""); // 清空 output 的內容
+
+	                output.append("點餐項目為" +
+	                        "\n盤尼西林 Penicillin*" +w.getPe() +
+	                        "\n琴通尼 Gin Tonic*" + w.getGi() +
+	                        "\n野格炸彈 Jägerbomb*" + w.getJa() +
+	                        "\n柯夢波丹 Cosmopolitan*" +  w.getCo() +
+	                        "\n摩西多 Mojito*" + w.getMo() +
+	                        "\n總金額:" + sum + "元\n");
+
+JButton btnNewButton_1 = new JButton("結帳");
+		btnNewButton_1.setBounds(594, 175, 87, 23);
+		btnNewButton_1.setFont(new Font("新細明體", Font.PLAIN, 15));
+		contentPane.add(btnNewButton_1);
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		        String currentTime = dateFormat.format(new Date());
+
+		        int Pe = (int) spinnerPe.getValue();
+                int Gi = (int) spinnerGi.getValue();
+                int Ja = (int) spinnerJa.getValue();
+                int Co = (int) spinnerCo.getValue();
+                int Mo = (int) spinnerMo.getValue();
+
+                work w = new work(Ja, Co, Gi, Mo, Pe);
+                
+
+                int sum = w.getSum();
+               
+		        
+
+		        String paymentText = paymentPane.getText();
+		        int payment = Integer.parseInt(paymentText);
+		        if (AAA.isSelected()) sum = (int) (sum * 0.9);
+		        if (BBB.isSelected()) sum = (int) (sum * 0);
+		        if (CCC.isSelected()) sum = (int) (sum);
+		        int change = payment - sum;
+
+		        output2.setText("\n結帳時間：" + currentTime +
+		            "\n總金額:" + sum + "元" +
+		            "\n付款金額：" + payment + "元" +
+		            "\n找零：" + change + "元" +
+		            "\n明細：" +
+		            "\n盤尼西林 Penicillin*" + w.getPe() +
+                    "\n琴通尼 Gin Tonic*" + w.getGi() +
+                    "\n野格炸彈 Jägerbomb*" + w.getJa() +
+                    "\n柯夢波丹 Cosmopolitan*" + w.getCo() +
+                    "\n摩西多 Mojito*" + w.getMo() );
+		    }
+		});
+
+JButton exit = new JButton("關閉");
+		exit.setBounds(594, 467, 87, 23);
+        contentPane.add(exit);
+        exit.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		System.exit(0);
+        	}
+        });
+
+JButton print = new JButton("列印");
+		print.setBounds(594, 428, 87, 23);
+		print.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {	 
+				     output2.print();
+				    }
+				catch(PrinterException el)
+				{
+					el.printStackTrace();
+				}
+					}
+		});
+
+//時間設定起點
+		timeLabel = new JLabel();
+		timeLabel.setBounds(325, 320, 200, 30);
+		        timeLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+		        Color customColor = new Color(0, 255, 0); // 顏色自訂義
+		        timeLabel.setForeground(customColor); // 设置数字显示的颜色
+		        contentPane.add(timeLabel);
+		        contentPane.setComponentZOrder(timeLabel, 0);
+		        startClock();
+		    }
+
+		    private void startClock() {
+		        Thread clockThread = new Thread(() -> {
+		            while (true) {
+		                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		                String dateTime = dateFormat.format(new Date());
+		                SwingUtilities.invokeLater(() -> timeLabel.setText(dateTime));
+		                try {
+		                    Thread.sleep(1000); // 每秒更新一次时间
+		                } catch (InterruptedException e) {
+		                    e.printStackTrace();
+		                }
+		            }
+		        });
+
+		        clockThread.start();
+		    }		//時間設定終點
+
+
